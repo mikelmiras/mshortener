@@ -1,0 +1,27 @@
+name: Build Next.js App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2.5.0
+        with:
+          node-version: '14.x'
+
+      - name: Install Dependencies
+        run: |
+          npm install
+
+      - name: Build App
+        run: |
+          npm run build
