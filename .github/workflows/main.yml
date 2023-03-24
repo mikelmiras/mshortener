@@ -1,27 +1,49 @@
-name: Build Next.js App
+name: Build and Deploy Next.js App
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v2
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v2.5.0
-        with:
-          node-version: '14.x'
+    - name: Use Node.js 16.x
+      uses: actions/setup-node@v2
+      with:
+        node-version: "16.x"
 
-      - name: Install Dependencies
-        run: |
-          npm install
+    - name: Install Dependencies
+      run: npm install
 
-      - name: Build App
-        run: |
-          npm run build
+    - name: Build Next.js App
+      run: npm run build
+
+    - name: Deploy to Production
+      uses: easingthemes/ssh-deploy@v2.1.5
+      with:
+        args: |
+          --delete
+          --exclude 'node_modules'
+          --exclude '.git'
+          --exclude '.next/cache'
+          --exclude '.next/server'
+          --exclude '.next/static'
+          --exclude '.next/image-cache'
+          --exclude '.next/image-loader'
+          --exclude '.next/plugins'
+          --exclude '.next/build-manifest.json'
+          --exclude '.next/prerender-manifest.json'
+          --exclude '.next/routes-manifest.json'
+          --exclude '.next/server/*'
+          --exclude '.next/static/*'
+        local_dir: .next/
+        deploy_key: ${{ env.SSH_PRIVATE_KEY }}
+        server_host: ${{ env.HOST }}
+        server_port: ${{ env.PORT }}
+        server_user: ${{ env.USERNAME }}
+        remote_dir: /var/www/my-app
