@@ -69,6 +69,29 @@ export function generateAccessToken() {
  */
 export async function doesAppExist(client, appid){
     const data = await client.query('SELECT * FROM application WHERE public_id = $1;', [appid])
-    
     return data.rowCount === 1;
+}
+/**
+ * This method returns true if specified redirection URI is allowed by specified app and false otherwise.
+ * @param {Client} client 
+ * @param {Int} appid 
+ * @param {String} uri 
+ */
+export async function isURIValid(client, appid, uri){
+  const data = await client.query('SELECT 0 from application_uri WHERE app_id = $1 AND uri = $2;', [appid, uri])
+  return data.rowCount == 1;
+}
+
+/**
+ * This function generates a one-time-use code that can be exchanged for an access token
+ * @returns 
+ */
+export function generateCode(){
+  const length = 20;
+  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let token = '';
+  for (let i = 0; i < length; i++) {
+    token += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return token;
 }
