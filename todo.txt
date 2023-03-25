@@ -1,3 +1,8 @@
-1- Finish fetch API
+1- Finish fetch API -> Already finished
 2- Authorize or cancel button + redirect if accepted (fetch /api/code/generate.js with user's native access token)
 3- /token endpoint
+
+
+
+example url:
+http://localhost:3000/authorize?client_id=80786076&response_type=code&redirect_uri=https://mikelmiras.com
