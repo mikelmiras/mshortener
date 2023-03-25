@@ -1,4 +1,4 @@
-import { doesAppExist, generateCode, getDB, isURIValid, UNAUTHORIZED } from "../util";
+import { BAD_REQUEST, doesAppExist, generateCode, getDB, isURIValid, UNAUTHORIZED } from "../util";
 
 export default async function handler(req, res){
     // Required params:
@@ -11,7 +11,7 @@ export default async function handler(req, res){
     const token = req.body.token; // Logged in user's token
 
     if (!client_id || !response_type || !redirect_uri || !token){
-        res.status(400).json()
+        res.status(400).json(BAD_REQUEST)
         return;
     }
     

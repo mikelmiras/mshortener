@@ -3,9 +3,9 @@ import { BAD_REQUEST, basicAuth, doesAppExist, getDB, isURIValid, NOT_FOUND, UNA
 // This function fetches App's information (name and scopes) from given token. Requires Basic auth.
 export default async function handler(req, res){
     const auth = req.headers.authorization;
-    const redirect_uri = req.body.redirect_uri
-    const app_public = req.body.app_public
-    const scope = req.body.scopes ? req.body.scopes.split(" ") : ['user-info']
+    const redirect_uri = req.query.redirect_uri
+    const app_public = req.query.client_id
+    const scope = req.query.scope ? req.query.scope.split(" ") : ['user-info']
     if (!auth || !app_public ){
         res.status(400).json(BAD_REQUEST)
         return;
@@ -34,6 +34,6 @@ export default async function handler(req, res){
         if (item.rowCount !== 1) continue
         scopes.push(item.rows[0])
     }
-    
-    res.status(200).json({app, scopes})
+    const newapp = {...app, redirect_uri}
+    res.status(200).json({"app":newapp, scopes})
 }

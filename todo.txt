@@ -5,4 +5,4 @@
 
 
 example url:
-http://localhost:3000/authorize?client_id=80786076&response_type=code&redirect_uri=https://mikelmiras.com
+http://localhost:3000/authorize?client_id=80786076&response_type=code&redirect_uri=https://mikelmiras.com/&scope=user-info%20link-edit
