@@ -3,7 +3,7 @@ import AuthorizeApp from "../components/AuthorizeApp"
 import LoginForm from "../components/LoginForm"
 
 
-export default function Authorize({user}){
+export default function Authorize({user, app, scopes}){
     const [credential, setCredential] = useState("")
     const [pass, setPass] = useState("")
     let initialRender = <></>
@@ -29,7 +29,7 @@ export async function getServerSideProps(context){
     const client_id = url_data.get("client_id") // Mandatory
     const redirect_uri = url_data.get("redirect_uri") // Mandatory
     const response_type = url_data.get("response_type") // Mandatory
-    const scope = url_data.get("scope")
+    const scope = url_data.get("scope") ? url_data.get("scope") : 'user-info'
     if (!client_id || !redirect_uri || response_type !== "code"){
         return{
             notFound:true,
@@ -59,9 +59,12 @@ export async function getServerSideProps(context){
             }
         }else{
         const user = await resp.json()
+
+            
     return{
         props:{
-            user:user.user
+            user:user.user,
+            scopes
         }
     }
 }
