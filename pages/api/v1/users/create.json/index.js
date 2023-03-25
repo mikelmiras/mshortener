@@ -5,7 +5,6 @@ export default async function(req, res){
         res.setHeader("Allow","POST, OPTIONS")
         const date = new Date()
         date.setFullYear(date.getFullYear() + 1)
-        //res.setHeader("Set-cookie", "miki=892jfehfbehu2hfhpkmsandunjubf283;path=/;Expires=" + date.toGMTString() + ";")
         res.status(405).json(METHOD_NOT_ALLOWED)
         return;
     }
@@ -24,7 +23,7 @@ export default async function(req, res){
     const client = await getDB();
     const hash = await hashPassword(pass)
     try {
-        const id = generateUserId()
+        const id = generateUserId(999, 9999999)
     let resp = await client.query('INSERT INTO users (id, username, email, password) VALUES ($1, $2, $3, $4);',
     [id, usname, email, hash])
     if (resp.rowCount == 1){

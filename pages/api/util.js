@@ -19,10 +19,8 @@ export async function hashPassword(password) {
     return match;
   }
 
-  export function generateUserId() {
-    const min = 999;
-    const max = 9999999;
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+  export function generateUserId(minim, maxim) {
+    return Math.floor(Math.random() * (maxim - minim + 1)) + minim;
   }
   
 
@@ -38,3 +36,39 @@ export const INTERNAL_SERVER_ERROR = {"error":{
     "code":500,
     "message":"Internal server error"
 }}
+
+export const BAD_REQUEST = {"error":{
+  "code":400,
+  "message":"Bad request"
+}}
+export const NOT_FOUND = {"error":{
+  "code":404,
+  "message":"Not found"
+}}
+
+export const UNAUTHORIZED = {"error":{
+  "code":401,
+  "message":"Unauthorized"
+}}
+
+export function generateAccessToken() {
+  const length = 64;
+  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,';
+  let token = '';
+  for (let i = 0; i < length; i++) {
+    token += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return token;
+}
+
+/**
+ * This method returns true if appid app exixts, false otherwise.
+ * @param {Client} client 
+ * @param {Int} appid 
+ * @return boolean
+ */
+export async function doesAppExist(client, appid){
+    const data = await client.query('SELECT * FROM application WHERE public_id = $1;', [appid])
+    
+    return data.rowCount === 1;
+}
