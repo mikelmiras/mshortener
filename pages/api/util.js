@@ -95,3 +95,18 @@ export function generateCode(){
   }
   return token;
 }
+
+/**
+ * This method gets authorization headers encoded in abse64 and returns an array with them decoded. First element is
+ * application's public id, and second is the secret key.
+ * @param {Header} auth 
+ * @returns Array
+ */
+export function basicAuth(auth){
+  const type = auth?.split(" ")[0]
+  const basic = auth?.split(" ")[1]
+  const decoded = Buffer.from(basic, "base64").toString()
+  const public_id = decoded.split(":")[0]
+  const secret = decoded.split(":")[1]
+  return [public_id, secret];
+}

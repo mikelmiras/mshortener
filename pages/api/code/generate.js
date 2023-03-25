@@ -38,11 +38,13 @@ export default async function handler(req, res){
     const user_id = userExists.rows[0].id
     const expire = new Date()
     expire.setMinutes(expire.getMinutes() + 5)
-    console.log(getLocalISOString(expire))
     await client.query('DELETE FROM code WHERE expire < CURRENT_TIMESTAMP;');
     await client.query('INSERT INTO code VALUES ($1, $2, $3, $4, $5);', [user_id, getLocalISOString(expire), code, null, client_id])
-    res.status(200).json({"request":{client_id, response_type, redirect_uri, scope}, code, user_id})
-    
+    const scopes = scope.split(" ")
+    scopes.forEach(async element => {
+        client.query('INSERT INTO code_scopes VALUES($1, $2);', [element, code])
+    })
+    res.status(200).json({"request":{client_id, response_type, redirect_uri, scope}, code, user_id, scopes})
     } catch(e){
         res.status(500).json({"error":"There was an error processing your request"})
     }

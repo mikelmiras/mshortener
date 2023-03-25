@@ -1,4 +1,5 @@
-// This function validates a login made from native app.
+// This function validates a login made from native app. Returns User object if access token's app matches with
+// native app's credentials.
 import { getDB } from "../util";
 export default async function handler(req, res){
     const credential = req.body.token

@@ -1,8 +1,9 @@
-import { BAD_REQUEST, basicAuth, generateAccessToken, generateUserId, UNAUTHORIZED } from "../../../util";
+import { BAD_REQUEST, basicAuth, UNAUTHORIZED } from "../../../util";
 
+// This function fetches App's information (name and scopes) from given token. Requires Basic auth.
 export default async function handler(req, res){
-    const auth = req.headers.authorization
-    if (!auth || auth?.split(" ")[0] !== "Basic"){
+    const auth = req.headers.authorization;
+    if (!auth){
         res.status(400).json(BAD_REQUEST)
         return;
     }
@@ -11,5 +12,5 @@ export default async function handler(req, res){
         res.status(401).json(UNAUTHORIZED)
         return;
     }
-    res.status(200).json({"id":generateUserId(9999, 99999999), "private_token":generateAccessToken()})
+    res.status(200).json()
 }
