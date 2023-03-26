@@ -2,10 +2,7 @@
 :root {
   font-family: 'Inter', sans-serif;
 }
-* {
-  margin: 0;
-  padding: 0;
-}
+
 header > nav > button {
   padding: .5em 1.5em;
 }
