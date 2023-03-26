@@ -1,19 +1,10 @@
+import Header from "../components/Header"
 
 
-export default function Index(){
+export default function Index({user}){
     return(
         <>
-        <header>
-            <img src="./logo.png" />
-            <nav className="pc-nav">
-                <a>Login</a>
-                <a>Sign up</a>
-                <button>Start</button>
-                </nav>
-                <nav className="mobile-nav">
-                <button>Start</button>
-                </nav>
-        </header>
+        <Header user={user}/>
         <MainSection>
             <div className="first">
             <h1>Make Your Links Manageable and Memorable: Simplify Your URLs with Our Powerful URL Shortener App!</h1>
@@ -34,4 +25,34 @@ export function MainSection({children}){
             {children}
         </section>
     )
+}
+
+export async function getServerSideProps({req, res}){
+    const islogged = await isUserLoggedIn(req.cookies.mshortener_account_auth)
+    if (!islogged){
+        return{
+            props:{
+
+            }
+        }
+    }else{
+        return{
+            props:{
+                "user":islogged.data
+            }
+        }
+    }
+}
+
+
+export async function isUserLoggedIn(cookie){
+    console.log(cookie)
+    if (!cookie) return undefined;
+    const dat = await fetch(process.env.API_ENDPOINT + "v1/me", {
+        headers:{
+            "Authorization":"Bearer " + cookie
+        }
+    })
+    if (dat.status !== 200) return undefined;    
+    return await dat.json()
 }

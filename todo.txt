@@ -1,6 +1,4 @@
-1- Finish fetch API -> Already finished
-2- Authorize or cancel button + redirect if accepted (fetch /api/code/generate.js with user's native access token)
-3- /token endpoint
+1. Finish api/v1/links/create.json endpoint
 
 
 
