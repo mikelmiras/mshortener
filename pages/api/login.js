@@ -32,11 +32,11 @@ export default async function handler(req, res){
     const savetoken = await client.query('INSERT INTO access_token VALUES($1, $2, $3, $4);', [
         process.env.APP_PUBLIC, token, result.id, expire.toISOString()
     ])
-    const saveScopes = await client.query('INSERT INTO token_scope VALUES($1, $2);', [
+    const saveScopes = await client.query('INSERT INTO access_token_scopes VALUES($1, $2);', [
         'link-edit',
         token
     ])
-    await client.query('INSERT INTO token_scope VALUES($1, $2);', [
+    await client.query('INSERT INTO access_token_scopes VALUES($1, $2);', [
         'user-info',
         token
     ])

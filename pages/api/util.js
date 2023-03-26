@@ -110,3 +110,18 @@ export function basicAuth(auth){
   const secret = decoded.split(":")[1]
   return [public_id, secret];
 }
+
+/**
+ * This function searches secret token for given app id. 
+ * @param {Client} client Active DB connection.
+ * @param {Int} public_id App's public token.
+ * @returns Secret token if public_id exists, undefined otherwise.
+ */
+export async function getSecretFromPublic(client, public_id){
+  let returns = undefined
+  const resp = await client.query('SELECT secret FROM application WHERE public_id = $1', [public_id])
+  if (resp.rowCount === 1){
+    returns = resp.rows[0].secret
+  }
+    return returns
+}
