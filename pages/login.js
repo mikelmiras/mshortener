@@ -20,7 +20,6 @@ export async function getServerSideProps({req, res}){
             "Authorization":"Bearer " + cookie
         }
     })
-
     if (resp.status!== 200){
         return{
             props:{

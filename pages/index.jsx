@@ -5,9 +5,12 @@ export default function Index(){
         <>
         <header>
             <img src="./logo.png" />
-            <nav>
+            <nav className="pc-nav">
                 <a>Login</a>
                 <a>Sign up</a>
+                <button>Start</button>
+                </nav>
+                <nav className="mobile-nav">
                 <button>Start</button>
                 </nav>
         </header>

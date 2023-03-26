@@ -21,6 +21,7 @@ header > nav {
 }
 .main-section > .first {
   width: 70%;
+  display: flex;
   color: #FE5F55;
   font-size: 1.6em;
 }
@@ -236,13 +237,25 @@ box-shadow: 0px 0px 39px -12px rgba(0,0,0,0.75);
   align-items: center;
   text-align: center;
 }
+.mobile-nav {
+  display: none;
+}
 
 @media (max-width: 900px){
+  .btn-input-wrapper {
+    margin-top: 0em;
+  }
+  header > .pc-nav {
+    display: none;
+  }
   header {
     padding: 2em 1em;
   }
+
   .main-section {
-    padding: 5em 1em;
+    padding: 0em 1em;
+    gap: 0;
+    height: fit-content;
   }
   .main-section > .first {
     width: 90% !important;
