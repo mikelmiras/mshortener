@@ -2,6 +2,7 @@ import { useState } from "react";
 export default function LoginForm({reload}){
     const [credential, setCredential] = useState("")
     const [pass, setPass] = useState("")
+    const [logintxt, setLogintxt] = useState("Log in")
     return(
     <>
     <div className="oauth2-wrapper">
@@ -19,6 +20,7 @@ export default function LoginForm({reload}){
             elem.className = "error-msg"
             return;
         }
+        setLogintxt("Loading...")
         const body = new URLSearchParams()
         body.append("credential", credential)
         body.append("pass", pass)
@@ -35,6 +37,8 @@ export default function LoginForm({reload}){
            if (reload){
             window.location = window.location
            }
+        }else{
+            setLogintxt("Log in")
         }
         }              
             )
@@ -45,7 +49,7 @@ export default function LoginForm({reload}){
         <input placeholder="Password" onChange={(e)=>{
             setPass(e.target.value)
         }} type={"password"} />
-        <input className="primary" type={"submit"} value="Log in"/>
+        <input className="primary" type={"submit"} value={logintxt}/>
         <p id="err-msg" className="error-msg hidden">Default no-error msg</p>
         <hr/>
         <button className="secondary">Create an account</button>
