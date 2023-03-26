@@ -15,7 +15,9 @@ export default function AuthorizeApp({name, scopes, user, redirect_uri, url, tok
         <hr/>
         <h2>When you grant access, you will be redirected to: {redirect_uri}</h2>
         <div className="btns">
-            <button>Cancel</button>
+            <button onClick={(e)=>{
+                window.location.href = redirect_uri + "?error=access_denied"
+            }}>Cancel</button>
             <button onClick={(e)=>{
                 if (click) return;
                 setCLick(true)

@@ -22,7 +22,7 @@ export default async function handler(req, res){
     }
     // Check that query params are given
     const {grant_type, code, redirect_uri} = req.query
-    if (grant_type !== "authorization_code" || !code || !redirect_uri){
+    if (!grant_type){
         res.status(400).json(BAD_REQUEST)
         return;
     }
@@ -35,6 +35,28 @@ export default async function handler(req, res){
     const appexists = await doesAppExist(client, app_public)
     if (!appexists){
         res.status(401).json(UNAUTHORIZED)
+        return;
+    }
+    switch(grant_type){
+        case "authorization_code":
+            await getAccessToken(client, req, res, app_public, app_secret, code, redirect_uri)
+            break;
+        case "refresh_token":
+            await generateRefreshToken(client, req, res, app_public, app_secret)
+            break;
+        default:
+            res.status(400).json(BAD_REQUEST)
+    }
+    
+}
+
+
+
+async function getAccessToken(client, req, res, app_public, app_secret, redirect_uri){
+    const code = req.query.code
+    // Check that specific query params are provided 
+    if (!redirect_uri || !code){
+        res.status(400).json(BAD_REQUEST)
         return;
     }
     // Validate secret token
@@ -96,4 +118,63 @@ export default async function handler(req, res){
 
 
     res.status(200).json({access_token, "expire":3600 ,refresh_token})
+}
+
+async function generateRefreshToken(client, req, res, app_public, app_secret){
+    // To request a refreshed access token, client_id and the refresh token must be sent through body
+    const client_id = req.body.client_id
+    const refresh_token = req.body.refresh_token
+    if (!client_id || !refresh_token){
+        res.status(400).json(BAD_REQUEST)
+        return;
+    }
+    // Client id and client id from header must be the same.
+    if (client_id !== app_public){
+        res.status(400).json(BAD_REQUEST)
+        return;
+    }
+
+    // Validate that the refresh token exists and is not expired, if exists fetch app_data
+    const token_data = await client.query('SELECT user_id, app_id FROM refresh_token WHERE token = $1 AND CURRENT_TIMESTAMP < expires;', [refresh_token])
+    if (token_data.rowCount !== 1){
+        // Token is not valid or has expired
+        res.status(400).json(NOT_FOUND)
+        return;
+    }
+
+    // Get user's and app's id from given refresh token.
+    const {user_id, app_id} = token_data.rows[0]
+    // Generate new access token
+    const access_token = generateAccessToken()
+    // Generate new access token's expiration
+    const expire = new Date()
+    expire.setHours(expire.getHours() + 1)
+    // Save new access_token
+    try{
+        await client.query('INSERT INTO access_token(app_id, token, user_id, expire) VALUES($1, $2, $3, $4);', [
+            app_id, access_token, user_id, getLocalISOString(expire)
+        ]);
+    let scopes = ""
+     // Fetch scopes from refresh_token
+    const fetch_scopes = await client.query('SELECT scope FROM refresh_token_scopes WHERE token = $1;', [refresh_token])
+    if (fetch_scopes.rowCount > 0){
+        // Validate that there are scopes (always should be at least one, but just in case)
+        for (const scope of fetch_scopes.rows){
+            scopes += scope.scope + " "       
+            console.log(scope.scope)   
+            await client.query('INSERT INTO access_token_scopes VALUES ($1, $2);', [
+                scope.scope, access_token
+            ])
+        }
+        scopes.trim()
+    }
+
+    res.status(200).json({access_token, "token-type":"Bearer", scopes, "expires":3600})
+    await client.end()
+    
+
+} catch(e){
+    console.log(e)
+    res.status(500).json(INTERNAL_SERVER_ERROR)
+}    
 }

@@ -1,4 +1,4 @@
-import { BAD_REQUEST, getDB, METHOD_NOT_ALLOWED, UNAUTHORIZED } from "../../util";
+import { BAD_REQUEST, FORBIDDEN, getDB, METHOD_NOT_ALLOWED, UNAUTHORIZED } from "../../util";
 
 export default async function handler(req, res){
     if (req.method !== "GET" && req.method !== "OPTIONS"){
@@ -17,6 +17,15 @@ export default async function handler(req, res){
         return;
     }
     const client = await getDB();
+
+    // Validate that user has scopes
+    const allowed = await client.query('SELECT * FROM access_token_scopes WHERE scope = $1 AND token = $2', [
+        'user-info', token
+    ])
+    if (allowed.rowCount !== 1){
+        res.status(403).json(FORBIDDEN)
+        return;
+    }
     const user = await client.query('select username, email from access_token INNER JOIN users on users.id = access_token.user_id WHERE access_token.token = $1 AND access_token.expire > current_timestamp;', [token])
     if (user.rowCount !== 1){
         res.status(401).json({"error":{

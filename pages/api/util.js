@@ -51,6 +51,11 @@ export const UNAUTHORIZED = {"error":{
   "message":"Unauthorized"
 }}
 
+export const FORBIDDEN = {"error":{
+  "code":403,
+  "message":"Forbidden"
+}}
+
 export function generateAccessToken() {
   const length = 64;
   const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,';
