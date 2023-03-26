@@ -39,7 +39,7 @@ export default async function handler(req, res){
     const expire = new Date()
     expire.setMinutes(expire.getMinutes() + 5)
     await client.query('DELETE FROM code WHERE expire < CURRENT_TIMESTAMP;');
-    await client.query('INSERT INTO code VALUES ($1, $2, $3, $4, $5, $6);', [user_id, expire, code, null, client_id, redirect_uri])
+    await client.query("INSERT INTO code (user_id, code, state, app_id, uri) VALUES ($1, $2, $3, $4, $5);", [user_id, code, null, client_id, redirect_uri])
     const scopes = scope.split(" ")
     scopes.forEach(async element => {
         client.query('INSERT INTO code_scopes VALUES($1, $2);', [element, code])
@@ -53,8 +53,9 @@ export default async function handler(req, res){
 
 
 export function getLocalISOString(date) {
-    const tzOffset = date.getTimezoneOffset() * 60000; // Get the time zone offset in milliseconds
-    const localTime = date.getTime() - tzOffset; // Subtract the time zone offset from the UTC time
-    return new Date(localTime).toISOString(); // Convert the local time to ISO 8601 string
-  }
+    // create a new date object in the EST timezone
+    const estDate = new Date(date.toLocaleString("en-US", { timeZone: "Europe/Madrid" }));
   
+    // return the ISO string for the EST timezone date
+    return estDate.toISOString();
+  }
