@@ -31,9 +31,11 @@ export default function LoginForm({reload}){
             },
             body:body.toString()
         }).then(data=>data.json()).then(data=>{
+            if (data.access_token){
            if (reload){
             window.location = window.location
            }
+        }
         }              
             )
     }}>
