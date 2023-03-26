@@ -69,7 +69,6 @@ export async function getServerSideProps(context){
             }
         }
         const app = await app_data.json()
-        console.log(app)
     return{
         props:{
             user:user.user,
