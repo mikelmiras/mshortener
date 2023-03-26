@@ -17,9 +17,9 @@ export default async function handler(req, res){
     await client.end()
     if (user.rowCount === 1){
         res.status(200).json({user:user.rows[0]})
+        return;
     }else{
         res.status(401).json()
+        return;
     }
-    res.status(500).json()
-
 }

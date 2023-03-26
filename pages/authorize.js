@@ -41,13 +41,14 @@ export async function getServerSideProps(context){
         }
         }
     }
-    const resp = await fetch(process.env.API_ENDPOINT + "/session/validate", {
+    const resp = await fetch(process.env.API_ENDPOINT + "session/validate", {
         "method":"POST",
         headers:{
             "Content-type":"application/x-www-form-urlencoded"
         },
         body:"token=" + cookies.mshortener_account_auth
         })
+        console.log(resp.status)
         if (resp.status !== 200){
             return{
                 props:{
