@@ -161,7 +161,6 @@ async function generateRefreshToken(client, req, res, app_public, app_secret){
         // Validate that there are scopes (always should be at least one, but just in case)
         for (const scope of fetch_scopes.rows){
             scopes += scope.scope + " "       
-            console.log(scope.scope)   
             await client.query('INSERT INTO access_token_scopes VALUES ($1, $2);', [
                 scope.scope, access_token
             ])
@@ -174,7 +173,6 @@ async function generateRefreshToken(client, req, res, app_public, app_secret){
     
 
 } catch(e){
-    console.log(e)
     res.status(500).json(INTERNAL_SERVER_ERROR)
 }    
 }

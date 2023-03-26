@@ -28,7 +28,6 @@ export default async function handler(req, res){
     const token = generateAccessToken();
     const expire = new Date();
     expire.setFullYear(expire.getFullYear() + 1);
-    console.log(process.env.APP_PUBLIC);
     const savetoken = await client.query('INSERT INTO access_token VALUES($1, $2, $3, $4);', [
         process.env.APP_PUBLIC, token, result.id, expire.toISOString()
     ])

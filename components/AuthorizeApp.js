@@ -1,21 +1,28 @@
 import { useEffect, useState } from "react"
-
+import {AiOutlineCheckCircle} from "react-icons/ai"
 export default function AuthorizeApp({name, scopes, user, redirect_uri, url, token}){
     const [click, setCLick] = useState(false)
     return(
-    <div>
+    <div className="oauth2-wrapper">
+        <img src="./logo.png" className="absolute-logo"/>
+        <div className="oauth2">
+            <div className="main-heading">
         <h2>An external application</h2>
         <h1>{name}</h1>
         <h2>wants to access your MShortener account</h2>
-        <p>Logged in as {user.username}</p>
+        <p>Logged in as <b>{user.username}</b> <a href="/logout">Logout</a></p>
+        </div>
         <hr/>
+        <h3>This will allow {name} application's developer to:</h3>
+        <ul className="scope-list">
         {scopes.map(item=>{
-            return(<p key={item.name}>{item .descr}</p>)
+            return(<li key={item.name}><span className="check"><AiOutlineCheckCircle/></span>{item .descr}</li>)
         })}
+        </ul>
         <hr/>
-        <h2>When you grant access, you will be redirected to: {redirect_uri}</h2>
+        <h3 className="smaller-h3">When you grant access, you will be redirected to: {redirect_uri}</h3>
         <div className="btns">
-            <button onClick={(e)=>{
+            <button className="secondary" onClick={(e)=>{
                 window.location.href = redirect_uri + "?error=access_denied"
             }}>Cancel</button>
             <button onClick={(e)=>{
@@ -37,8 +44,9 @@ export default function AuthorizeApp({name, scopes, user, redirect_uri, url, tok
                 }).catch(e=>{
                     alert("Internal error")
                 })
-            }}>Authorize</button>
+            }} className="primary">Authorize</button>
         </div>
+    </div>
     </div>
     )
 }
