@@ -11,7 +11,7 @@ export async function getServerSideProps({req, res}){
     res.setHeader("Set-cookie", "mshortener_account_auth=expire;expires=" + oldDate.toGMTString())
     return{
         redirect:{
-            destination:process.env.MAIN_ENDPOINT, 
+            destination:(req.headers.referer || req.headers.referrer) || process.env.MAIN_URL, 
             permanent:false,
         }
     }

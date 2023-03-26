@@ -4,11 +4,19 @@ export default function LoginForm({reload}){
     const [pass, setPass] = useState("")
     return(
     <>
+    <div className="oauth2-wrapper">
+    <img onClick={(e)=>{
+        window.location.href = "/"
+    }} src="./logo.png" className="absolute-logo"/>
+        <div className="oauth2 login-window">
     <h1>Login to MShortener</h1>
     <form onSubmit={(e)=>{
         e.preventDefault()
         if (credential == "" && pass == ""){
-            alert("Please, fill the inputs")
+            let elem = document.querySelector("#err-msg")
+            if (elem === undefined) return;
+            elem.innerHTML="Please, fill the inputs to proceed"
+            elem.className = "error-msg"
             return;
         }
         const body = new URLSearchParams()
@@ -29,13 +37,18 @@ export default function LoginForm({reload}){
         }              
             )
     }}>
-        <input onChange={(e)=>{
+        <input placeholder="Username or email" onChange={(e)=>{
             setCredential(e.target.value)
         }} type={"text"}></input>
-        <input onChange={(e)=>{
+        <input placeholder="Password" onChange={(e)=>{
             setPass(e.target.value)
         }} type={"password"} />
-        <input type={"submit"}/>
+        <input className="primary" type={"submit"} value="Log in"/>
+        <p id="err-msg" className="error-msg hidden">Default no-error msg</p>
+        <hr/>
+        <button className="secondary">Create an account</button>
     </form>
+    </div>
+    </div>
     </>)
 }

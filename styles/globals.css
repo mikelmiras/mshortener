@@ -100,12 +100,26 @@ body {
 p > a:hover {
   text-decoration: underline;
 }
+.login-window > h1 {
+  font-weight: 600;
+  color: #53687E;
+}
+.hidden {
+  visibility: hidden;
+}
+.error-msg {
+  text-align: left;
+  padding: 0;
+  color: red;
+  font-weight: 400;
+  margin: 0;
+}
 p > a {
   margin-left: .25em;
   text-decoration: none;
   color: #14080E;
 }
-.oauth2 > hr {
+.oauth2 > hr, form > hr {
   width: 100%;
   border: solid .01px #53687E;
   border-radius: 10px;
@@ -159,11 +173,27 @@ p > a {
 .smaller-h3 {
   font-size: .75em !important;
 }
+.oauth2 > form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.oauth2 > form > input{
+    margin: .5em 0;
+    font-family: 'Inter',sans-serif;
+    font-size: 1.3em;
+    padding: .5em;
+    outline: none;
+    border: none;
+    -webkit-appearance: none;
+    border-radius: 8px;
+    border: solid 1px #FE5F55;
+}
 .secondary {
   background-color: #EEF5DB;
   color: #FE5F55;
 }
-button {
+button, input[type=submit] {
   -webkit-appearance: none;
   font-weight: 400;
   outline: none;
