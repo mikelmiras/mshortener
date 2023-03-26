@@ -10,7 +10,7 @@ export default function AuthorizeApp({name, scopes, user, redirect_uri, url, tok
         <h2>An external application</h2>
         <h1>{name}</h1>
         <h2>wants to access your MShortener account</h2>
-        <p>Logged in as <b>{user.username}</b> <a href="/logout">Logout</a></p>
+        <p>Logged in as <b>{user.username}</b> <a href={"/logout?redirect=/authorize?" + url}>Logout</a></p>
         </div>
         <hr/>
         <h3>This will allow {name} application&apos;s developer to:</h3>
