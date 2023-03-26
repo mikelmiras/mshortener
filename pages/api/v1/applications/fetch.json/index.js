@@ -34,6 +34,10 @@ export default async function handler(req, res){
         if (item.rowCount !== 1) continue
         scopes.push(item.rows[0])
     }
+    if (scopes.length == 0) {
+        const default_scope = await client.query('SELECT name, descr FROM scopes WHERE name = $1;', ["user-info"])
+        scopes.push(default_scope.rows[0])
+    }
     const newapp = {...app, redirect_uri}
     res.status(200).json({"app":newapp, scopes})
 }

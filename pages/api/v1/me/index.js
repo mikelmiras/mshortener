@@ -18,6 +18,14 @@ export default async function handler(req, res){
     }
     const client = await getDB();
 
+    // Validate that the token exists and is valid
+    const token_valid = await client.query('SELECT 0 FROM access_token WHERE token = $1 AND expire > CURRENT_TIMESTAMP;', [token])
+    if (token_valid.rowCount !== 1){
+        res.status(401).json(UNAUTHORIZED)
+        return;
+    }
+
+
     // Validate that user has scopes
     const allowed = await client.query('SELECT * FROM access_token_scopes WHERE scope = $1 AND token = $2', [
         'user-info', token

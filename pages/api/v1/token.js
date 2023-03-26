@@ -165,7 +165,7 @@ async function generateRefreshToken(client, req, res, app_public, app_secret){
                 scope.scope, access_token
             ])
         }
-        scopes.trim()
+        scopes = scopes.trim()
     }
 
     res.status(200).json({access_token, "token-type":"Bearer", scopes, "expires":3600})

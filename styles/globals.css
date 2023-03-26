@@ -32,7 +32,7 @@ header > nav {
 }
 .generate-button {
   position: relative !important;
-  top: 3.65em;
+  top: 3.8em;
   left: calc(100% - 5.4em);
   border-radius: 10px;
   height: 3.5em;
