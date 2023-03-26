@@ -13,7 +13,7 @@ export default function AuthorizeApp({name, scopes, user, redirect_uri, url, tok
         <p>Logged in as <b>{user.username}</b> <a href="/logout">Logout</a></p>
         </div>
         <hr/>
-        <h3>This will allow {name} application's developer to:</h3>
+        <h3>This will allow {name} application&apos;s developer to:</h3>
         <ul className="scope-list">
         {scopes.map(item=>{
             return(<li key={item.name}><span className="check"><AiOutlineCheckCircle/></span>{item .descr}</li>)
