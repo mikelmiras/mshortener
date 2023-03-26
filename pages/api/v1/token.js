@@ -21,7 +21,7 @@ export default async function handler(req, res){
         return; 
     }
     // Check that query params are given
-    const {grant_type, code, redirect_uri} = req.query
+    const {grant_type, code, redirect_uri} = req.body
     if (!grant_type){
         res.status(400).json(BAD_REQUEST)
         return;
@@ -53,7 +53,7 @@ export default async function handler(req, res){
 
 
 async function getAccessToken(client, req, res, app_public, app_secret, redirect_uri){
-    const code = req.query.code
+    const code = req.body.code
     // Check that specific query params are provided 
     if (!redirect_uri || !code){
         res.status(400).json(BAD_REQUEST)
@@ -121,15 +121,9 @@ async function getAccessToken(client, req, res, app_public, app_secret, redirect
 }
 
 async function generateRefreshToken(client, req, res, app_public, app_secret){
-    // To request a refreshed access token, client_id and the refresh token must be sent through body
-    const client_id = req.body.client_id
+    // To request a refreshed access token and the refresh token must be sent through body
     const refresh_token = req.body.refresh_token
-    if (!client_id || !refresh_token){
-        res.status(400).json(BAD_REQUEST)
-        return;
-    }
-    // Client id and client id from header must be the same.
-    if (client_id !== app_public){
+    if (!refresh_token){
         res.status(400).json(BAD_REQUEST)
         return;
     }

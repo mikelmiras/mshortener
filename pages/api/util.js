@@ -130,3 +130,41 @@ export async function getSecretFromPublic(client, public_id){
   }
     return returns
 }
+
+/**
+ * This function determines if a token has specified scope allowed.
+ * @param {*} client Active DB Connection
+ * @param {*} token Access token
+ * @param {*} scope Scope
+ */
+export async function allowedScope(client, token, scope){
+ const query = await client.query('SELECT 0 FROM access_token_scopes INNER JOIN access_token ON access_token_scopes.token = access_token.token WHERE access_token_scopes.token = $1 AND access_token_scopes.scope = $2 AND access_token.expire > CURRENT_TIMESTAMP;', [token, scope])
+ return query.rowCount === 1;
+}
+/**
+ * This function returns an object with the token's user data.
+ * Provided token must be valid. 
+ * Disclaimer: This method does not validate user-info scope, so this method's output should not be sent directly
+ * to the client before validating the scope. This method is for internal use only.
+ * @param {*} client Active DB connection
+ * @param {*} token Access token
+ */
+export async function getUserFromToken(client, token){
+  const resp = await client.query('SELECT id, username, email, admin FROM users INNER JOIN access_token ON access_token.user_id = users.id WHERE access_token.token = $1 AND access_token.expire > CURRENT_TIMESTAMP;', [token])
+  if (resp.rowCount !== 1){
+    return undefined
+  }
+  return resp.rows[0]
+}
+
+
+
+export function generateShortUrlId() {
+  const length = 9;
+  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let token = '';
+  for (let i = 0; i < length; i++) {
+    token += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return token;
+}
