@@ -181,3 +181,14 @@ export async function isNativeToken(client, token){
   const resp = await client.query('SELECT 0 from access_token WHERE token = $1 AND app_id = $2 AND expire > CURRENT_TIMESTAMP;' ,[token, process.env.APP_PUBLIC])
   return resp.rowCount === 1;
 }
+
+/**
+ * This function determines if a token exists and if it is still valid.
+ * @param {*} client Active DB conncetion
+ * @param {*} token Access token to validate
+ * @returns 
+ */
+export async function isTokenValid(client, token){
+  const resp = await client.query('SELECT 0 FROM access_token WHERE token = $1 AND expire > CURRENT_TIMESTAMP;', [token])
+  return resp.rowCount === 1;
+}

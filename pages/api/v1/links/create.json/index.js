@@ -33,7 +33,6 @@ if (auth){
     const scope = 'link-edit'
     const istokenvalid = await allowedScope(client, token, scope)
     if (istokenvalid){
-        console.log('Token is valid!')
         user = await getUserFromToken(client, token)
         author = parseInt(user?.id)
     }else{
@@ -54,6 +53,6 @@ catch (e){
 if (!author){
 res.status(200).json({id, redirect_uri})
 }else{
-    res.status(200).json({id, redirect_uri, "author":{"id":user.id, "username":user.username}})
+    res.status(200).json({id, redirect_uri})
 }
 }
