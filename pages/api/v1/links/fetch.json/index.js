@@ -69,7 +69,7 @@ async function noLink(client,token,req, res){
     const {id, username, email} = await getUserFromToken(client, token)
     const data = await await client.query(`SELECT
     link.id, link.url,
-    COUNT(link_visits.id) AS count
+    COUNT(link_visits.id) AS count, link.date
 FROM
     link_visits
     RIGHT JOIN link ON link.id = link_visits.id

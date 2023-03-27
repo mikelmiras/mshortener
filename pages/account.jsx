@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { isUserLoggedIn, MainSection } from ".";
 import Header from "../components/Header";
-
+import {FiBarChart2} from "react-icons/fi"
 export default function Account({user, links}){
     const [link, setLink] = useState(links)
     return(<>
@@ -31,7 +31,9 @@ export function LinksDisplay({links}){
         {links.map(link => {
             return(<><div onClick={(e)=>{
                 setSelectedLink(link.id)
-            }} className="link"><h1>{link.id}</h1><h2>{link.url}</h2><p>{new Date(link.date).toLocaleString("es-ES")}</p></div></>)
+            }} className="link"><h1>{link.id}</h1><h2>{link.url}</h2><p>{new Date(link.date).toLocaleString("es-ES")}</p>
+            <p><FiBarChart2/> {link.count}</p>
+            </div></>)
         })}
         </div>
         <div className="selected-link">{selected}</div>
