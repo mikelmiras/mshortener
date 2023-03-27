@@ -158,7 +158,10 @@ export async function getUserFromToken(client, token){
 }
 
 
-
+/**
+ * This function generates a random shortid for redirect links
+ * @returns Random, unique redirect link's id
+ */
 export function generateShortUrlId() {
   const length = 9;
   const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -167,4 +170,14 @@ export function generateShortUrlId() {
     token += chars[Math.floor(Math.random() * chars.length)];
   }
   return token;
+}
+/**
+ * This function determines if a specified token was made by the native app or a third party client.
+ * If it's a native app or not is determined by using the app id provided on the .env file.
+ * @param {Client} client Active DB connection
+ * @param {String} token Valid access token
+ */
+export async function isNativeToken(client, token){
+  const resp = await client.query('SELECT 0 from access_token WHERE token = $1 AND app_id = $2 AND expire > CURRENT_TIMESTAMP;' ,[token, process.env.APP_PUBLIC])
+  return resp.rowCount === 1;
 }

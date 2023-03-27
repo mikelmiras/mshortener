@@ -3,7 +3,7 @@
 // Method: POST
 // Auth: none or Bearer
 // Scopes: link-edit
-import {allowedScope, BAD_REQUEST, generateShortUrlId, getDB, getUserFromToken, METHOD_NOT_ALLOWED} from "../../../util"
+import {allowedScope, BAD_REQUEST, FORBIDDEN, generateShortUrlId, getDB, getUserFromToken, INTERNAL_SERVER_ERROR, METHOD_NOT_ALLOWED} from "../../../util"
 export default async function handler(req, res){
 // Validate method
 if (req.method !== 'POST'){
@@ -19,6 +19,7 @@ if (!redirect_uri){
 
 const auth = req.headers.authorization;
 const client = await getDB()
+let author = undefined
 let user = undefined
 if (auth){
     // If auth provided, validate and fetch user's id.
@@ -34,13 +35,25 @@ if (auth){
     if (istokenvalid){
         console.log('Token is valid!')
         user = await getUserFromToken(client, token)
-    }
+        author = parseInt(user?.id)
+    }else{
+        res.status(403).json(FORBIDDEN)
+        return;
+    }   
 }
 
-const author = user?.id
-
 const id = generateShortUrlId()
-
-
-res.status(200).json({author, id})
+    // Save redirect link
+    try {
+    await client.query('INSERT INTO link(id, url, userid) VALUES($1, $2, $3);', [id, redirect_uri, author])
+}
+catch (e){
+    res.status(500).json(INTERNAL_SERVER_ERROR)
+    return;
+}
+if (!author){
+res.status(200).json({id, redirect_uri})
+}else{
+    res.status(200).json({id, redirect_uri, "author":{"id":user.id, "username":user.username}})
+}
 }
