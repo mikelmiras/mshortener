@@ -89,18 +89,18 @@ async function getAccessToken(client, req, res, app_public, app_secret, redirect
     await client.query('DELETE FROM code WHERE code = $1', [code])
     // Generate expiration dates (access_token will expire in an hour, while refresh token will expire in 6 months)
     const access_token_expire = new Date()
-    access_token_expire.setHours(access_token_expire.getHours() + 1)
+    access_token_expire.setHours(access_token_expire.getHours() + 2)
 
     const refresh_token_expire = new Date()
     refresh_token_expire.setMonth(refresh_token_expire.getMonth() + 6)
-
+    console.log(access_token_expire)
     // Save tokens
     try {
         await client.query('INSERT INTO access_token(app_id, token, user_id, expire) VALUES($1, $2, $3, $4);', [
-            app_id, access_token, user_id, getLocalISOString(access_token_expire)
+            app_id, access_token, user_id, access_token_expire
         ]);
         await client.query('INSERT INTO refresh_token(app_id, token, user_id, expires) VALUES($1, $2, $3, $4);', [
-            app_id, refresh_token, user_id, getLocalISOString(refresh_token_expire)
+            app_id, refresh_token, user_id, refresh_token_expire
         ])
         scopes.forEach(async (scope)=>{
             client.query('INSERT INTO refresh_token_scopes VALUES ($1, $2);', [
@@ -146,7 +146,7 @@ async function generateRefreshToken(client, req, res, app_public, app_secret){
     // Save new access_token
     try{
         await client.query('INSERT INTO access_token(app_id, token, user_id, expire) VALUES($1, $2, $3, $4);', [
-            app_id, access_token, user_id, getLocalISOString(expire)
+            app_id, access_token, user_id, expire
         ]);
     let scopes = ""
      // Fetch scopes from refresh_token
