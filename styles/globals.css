@@ -31,6 +31,41 @@ header > nav {
   width: auto;
   height: auto;
 }
+.links-container {
+  display: flex;
+  width: 100%;
+  border: 1px solid #FE5F55;
+  flex-direction: row;
+  box-sizing: border-box;
+  padding: 1em;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+.link {
+  font-size: .8em;
+  transition: .2s all ease-in-out;
+}
+.selected-link {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+.link:hover {
+  transition: .2s all ease-in-out;
+  cursor: pointer;
+  background-color: rgba(255, 112, 90, 0.458);
+}
+.links > div {
+  border-bottom: solid 1px #FE5F55;
+}
+.links {
+  display: flex;
+  flex-direction: column;
+  border-right: solid 1px #FE5F55;
+  height: 100%;
+  width: 30%;
+}
 .generate-button {
   position: relative !important;
   top: 3.8em;

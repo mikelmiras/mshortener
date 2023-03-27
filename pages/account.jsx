@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { isUserLoggedIn, MainSection } from ".";
 import Header from "../components/Header";
 
@@ -8,20 +8,33 @@ export default function Account({user, links}){
     <Header user={user}/>
     <MainSection>
         <h1>Your links:</h1>
+        <div className="links-container">
         <LinksDisplay links={link}/>
+        </div>
     </MainSection>
     </>)
 }
 
 export function LinksDisplay({links}){
+    const [selected, setSelectedtxt] = useState("Please, select a link")
+    const [selectedLink, setSelectedLink] = useState(undefined)
+    useEffect((e)=>{
+        if (!selectedLink) setSelectedtxt("Please, select a link")
+        else setSelectedtxt(selectedLink)
+    }, [selectedLink])
     if (!links || links.length == 0){
         return(<h2>There are no links</h2>)
     }else{
         return(
             <>
+            <div className="links">
         {links.map(link => {
-            return(<><h1>{link.id}</h1><p>{link.url}</p></>)
+            return(<><div onClick={(e)=>{
+                setSelectedLink(link.id)
+            }} className="link"><h1>{link.id}</h1><h2>{link.url}</h2><p>{new Date(link.date).toLocaleString("es-ES")}</p></div></>)
         })}
+        </div>
+        <div className="selected-link">{selected}</div>
         </>
         )
     }
