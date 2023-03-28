@@ -1,4 +1,4 @@
-import { BAD_REQUEST, FORBIDDEN, getDB, METHOD_NOT_ALLOWED, UNAUTHORIZED } from "../../util";
+import { BAD_REQUEST, FORBIDDEN, getDB, isNativeToken, METHOD_NOT_ALLOWED, UNAUTHORIZED } from "../../util";
 
 export default async function handler(req, res){
     if (req.method !== "GET" && req.method !== "OPTIONS"){
@@ -42,5 +42,8 @@ export default async function handler(req, res){
         }})
         return;
     }
-    res.status(200).json({"data":user.rows[0]})
+    let native = undefined
+    const isnativetoken = await isNativeToken(client, token)
+    if (isnativetoken) native = true
+    res.status(200).json({"data":user.rows[0], native})
 }

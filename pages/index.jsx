@@ -46,13 +46,12 @@ export async function getServerSideProps({req, res}){
 
 
 export async function isUserLoggedIn(cookie){
-    console.log(cookie)
     if (!cookie) return undefined;
     const dat = await fetch(process.env.API_ENDPOINT + "v1/me", {
         headers:{
             "Authorization":"Bearer " + cookie
         }
     })
-    if (dat.status !== 200) return undefined;    
-    return await dat.json()
+    const data = await dat.json()  
+    return data
 }

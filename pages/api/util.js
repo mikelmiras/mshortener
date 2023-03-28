@@ -102,13 +102,14 @@ export function generateCode(){
 }
 
 /**
- * This method gets authorization headers encoded in abse64 and returns an array with them decoded. First element is
+ * This method gets authorization headers encoded in base64 and returns an array with them decoded. First element is
  * application's public id, and second is the secret key.
  * @param {Header} auth 
  * @returns Array
  */
 export function basicAuth(auth){
   const type = auth?.split(" ")[0]
+  if (type !== "Basic") return [undefined, undefined]
   const basic = auth?.split(" ")[1]
   const decoded = Buffer.from(basic, "base64").toString()
   const public_id = decoded.split(":")[0]
@@ -172,7 +173,7 @@ export function generateShortUrlId() {
   return token;
 }
 /**
- * This function determines if a specified token was made by the native app or a third party client.
+ * This function determines if a specified token was made by the native app or a third party client **and if it it's still valid** .
  * If it's a native app or not is determined by using the app id provided on the .env file.
  * @param {Client} client Active DB connection
  * @param {String} token Valid access token

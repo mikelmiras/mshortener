@@ -1,3 +1,4 @@
+import { isUserLoggedIn } from ".";
 import LoginForm from "../components/LoginForm";
 
 export default function Login(){
@@ -15,24 +16,23 @@ export async function getServerSideProps({req, res}){
     }
 }
 
-    const resp = await fetch(process.env.API_ENDPOINT + "v1/me", {
-        headers:{
-            "Authorization":"Bearer " + cookie
-        }
-    })
-    if (resp.status!== 200){
-        return{
+    const isLoggedIn = await isUserLoggedIn(cookie)
+    console.log('Logged in: ' + isLoggedIn)
+    if (isLoggedIn === undefined || isLoggedIn?.error){
+        const date = new Date()
+        date.setFullYear(2020)
+        res.setHeader("Set-cookie", "mshortener_account_auth=1;Expires=" + date.toGMTString() + ";path=/;")
+        return {
             props:{
 
             }
         }
-    }
-
+    }else{
     return{
         redirect:{
         destination:process.env.MAIN_URL + "/account",
         permanent:false,
     }
     }
-    
+}
 }

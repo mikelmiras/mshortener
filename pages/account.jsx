@@ -100,7 +100,7 @@ export function LinksDisplay({links, token}){
 
 export async function getServerSideProps({req, res}){
     const isLoggedIn = await isUserLoggedIn(req.cookies.mshortener_account_auth)
-    if (!isLoggedIn){
+    if (!isLoggedIn || isLoggedIn.error) {
         return{
                 redirect:{
                     destination:process.env.MAIN_URL + "/login",

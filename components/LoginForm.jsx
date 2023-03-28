@@ -35,7 +35,7 @@ export default function LoginForm({reload}){
         }).then(data=>data.json()).then(data=>{
             if (data.access_token){
            if (reload){
-            window.location = window.location
+                window.location.reload()
            }
         }else{
             setLogintxt("Log in")

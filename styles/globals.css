@@ -54,6 +54,27 @@ header > nav {
   font-weight: normal !important;
   font-size: .8em !important;
 }
+.create-new-app {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+.copy-uri {
+  text-decoration: underline;
+  cursor: pointer;
+}
+.create-new-app > input[type=text]{
+  width: 70%;
+  -webkit-appearance: none;
+  border: solid 1px #FE5F55;
+  font-size: .9em;
+  padding: 1em ;
+  border-radius: 10px;
+}
+.create-new-app > input[type=text]:focus {
+  outline: none;
+  border: solid 1px #FE5F55;
+}
 .link-holder-info > h1 {
   font-family: 'Inter', sans-serif;
   font-weight: 900;

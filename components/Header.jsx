@@ -9,7 +9,7 @@ export default function Header({user}){
     }
     return(
         <header>
-            <img src="./logo.png" />
+            <img src="/logo.png" />
             <nav className="pc-nav">
                 {options}
                 {btn}
